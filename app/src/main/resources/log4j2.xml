@@ -1,0 +1,30 @@
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="WARN" monitorInterval="15">
+    <Appenders>
+        <File name="File" fileName="logs/manga-chan.log">
+            <PatternLayout>
+                <Pattern>%d{yyyy/MM/dd HH:mm:ss} [Thread: %t] %level %logger %marker %message%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d{yyyy/MM/dd HH:mm:ss} [Thread: %t] %level %logger %marker %message%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+
+        <Logger name="org.apache.http" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+
+        <Logger name="net.dv8tion.jda" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+    </Loggers>
+</Configuration>

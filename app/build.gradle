@@ -8,6 +8,8 @@ repositories {
     mavenCentral()
 }
 
+version '1.0.0'
+
 dependencies {
     // Groovy
     implementation 'org.codehaus.groovy:groovy:3.0.7'
@@ -15,9 +17,18 @@ dependencies {
     // Discord
     implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-beta.19'
 
+    // JSON
+    def jackson_version = '2.16.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jackson_version
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jackson_version
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jackson_version
+
     // Misc
     implementation 'com.google.guava:guava:29.0-jre'
-    implementation group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+
+    def httpcomponents_version = '4.5.14'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: httpcomponents_version
 
     // Logging
     def slf4j_version = '2.0.7'
@@ -40,4 +51,19 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'org.tavern.mangachan.app.App'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+    baseName 'manga-chan'
+    archiveName = "${baseName}.${jar.extension}"
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    new File(jar.destinationDir , "/manga-chan-${version}").mkdir()
+    destinationDir = new File(jar.destinationDir , "/manga-chan-${version}")
+
 }
